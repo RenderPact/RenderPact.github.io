@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RenderPact — The Community for Fan Editors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9942A;
+    --gold-light: #E8B84B;
+    --gold-dim: #7A5A18;
+    --bg: #080808;
+    --bg2: #0F0F0F;
+    --bg3: #161616;
+    --surface: #1A1A1A;
+    --text: #F0EDE6;
+    --muted: #888078;
+    --border: rgba(201,148,42,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  .nav-wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+
+  .nav-wordmark span { color: var(--gold); }
+
+  .nav-cta {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-ghost {
+    padding: 9px 20px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover { border-color: var(--gold-dim); color: var(--text); }
+
+  .btn-gold {
+    padding: 9px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-gold:hover { background: var(--gold); color: #080808; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -58%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(201,148,42,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 18px;
+    object-fit: cover;
+    margin-bottom: 36px;
+    box-shadow: 0 0 60px rgba(201,148,42,0.18);
+    animation: logoFade 1s ease both;
+  }
+
+  @keyframes logoFade {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s 0.2s ease both;
+    opacity: 0;
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+    animation: fadeUp 0.9s 0.3s ease both;
+    opacity: 0;
+  }
+
+  .hero-headline .gold { color: var(--gold); }
+
+  .hero-sub-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 32px;
+    animation: fadeUp 0.9s 0.4s ease both;
+    opacity: 0;
+  }
+
+  .hero-desc {
+    max-width: 540px;
+    font-size: 17px;
+    font-weight: 300;
+    color: #9E9590;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeUp 0.9s 0.5s ease both;
+    opacity: 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.9s 0.65s ease both;
+    opacity: 0;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid var(--gold);
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 36px;
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid rgba(240,237,230,0.2);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: rgba(240,237,230,0.5); transform: translateY(-1px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1s 1.2s ease both;
+    opacity: 0;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollPulse 2s 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+
+  .marquee-track:hover { animation-play-state: paused; }
+
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .marquee-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+
+  .section-body {
+    font-size: 17px;
+    font-weight: 300;
+    color: #9E9590;
+    line-height: 1.75;
+    max-width: 560px;
+  }
+
+  /* ── MANIFESTO ── */
+  .manifesto {
+    background: var(--bg2);
+    padding: 100px 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .manifesto::before {
+    content: '';
+    position: absolute;
+    right: -100px; top: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(ellipse, rgba(201,148,42,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .manifesto-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .manifesto-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5.5vw, 64px);
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .manifesto-quote .accent { color: var(--gold); }
+
+  .manifesto-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── PILLARS ── */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+
+  .pillar {
+    background: var(--bg);
+    padding: 40px 36px;
+    position: relative;
+    transition: background 0.25s;
+  }
+
+  .pillar:hover { background: var(--bg3); }
+
+  .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 1;
+    color: rgba(201,148,42,0.12);
+    position: absolute;
+    top: 20px; right: 24px;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+  }
+
+  .pillar-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 20px;
+    color: var(--gold);
+  }
+
+  .pillar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .pillar-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── WHO IT'S FOR ── */
+  .for-section {
+    background: var(--bg2);
+    padding: 100px 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .for-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .for-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 40px;
+  }
+
+  .for-tag {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .for-tag:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  .for-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .for-stat {
+    background: var(--bg);
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .for-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 0.02em;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .for-stat-label {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+
+  .cta-banner-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .cta-banner-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+
+  .cta-banner-title .gold { color: var(--gold); }
+
+  .cta-banner-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+
+  .cta-banner-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .footer-logo img {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+
+  .footer-wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+
+  .footer-wordmark span { color: var(--gold); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-instagram {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+  }
+
+  .footer-instagram:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-cta { display: none; }
+    .for-inner { grid-template-columns: 1fr; gap: 48px; }
+    footer { flex-direction: column; text-align: center; padding: 32px 20px; }
+    .pillar { padding: 32px 24px; }
+    section { padding: 64px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="renderpact_instagram_dp.png" alt="RenderPact logo"/>
+    <span class="nav-wordmark">RENDER<span>PACT</span></span>
+  </a>
+  <div class="nav-cta">
+    <a href="https://instagram.com/renderpact" target="_blank" class="btn-ghost">Follow</a>
+    <a href="#submit" class="btn-gold">Submit Edit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-glow"></div>
+  <img src="renderpact_instagram_dp.png" alt="RenderPact" class="hero-logo"/>
+  <p class="hero-tag">The Community for Fan Editors</p>
+  <h1 class="hero-headline">RENDER<span class="gold">PACT</span></h1>
+  <h2 class="hero-sub-headline">Built by editors. For editors.</h2>
+  <p class="hero-desc">
+    You've been editing in silence long enough. 
+    RenderPact is where fan editors finally get the visibility, 
+    community, and recognition their craft deserves.
+  </p>
+  <div class="hero-actions">
+    <a href="https://instagram.com/renderpact" target="_blank" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      Follow on Instagram
+    </a>
+    <a href="#submit" class="btn-secondary">
+      Submit Your Edit
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">CapCut<span class="marquee-dot"></span></span>
+    <span class="marquee-item">After Effects<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Premiere Pro<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any Fandom<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any Follower Count<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any App<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Real Community<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Real Recognition<span class="marquee-dot"></span></span>
+    <span class="marquee-item">CapCut<span class="marquee-dot"></span></span>
+    <span class="marquee-item">After Effects<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Premiere Pro<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any Fandom<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any Follower Count<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Any App<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Real Community<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Real Recognition<span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-inner reveal">
+    <p class="section-tag">The Pact</p>
+    <blockquote class="manifesto-quote">
+      "You've been editing in silence<br/>
+      long enough.<br/>
+      The world hasn't heard you yet.<br/>
+      <span class="accent">But it will."</span>
+    </blockquote>
+    <p class="manifesto-sub">— RenderPact, founded by a fan editor with 5 years in the game</p>
+  </div>
+</div>
+
+<!-- PILLARS -->
+<section>
+  <p class="section-tag reveal">What We Do</p>
+  <h2 class="section-title reveal">NOT A REPOST PAGE.<br/>NOT A CLOUT CHASER.<br/><span style="color:var(--gold)">A REAL SPACE.</span></h2>
+
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <span class="pillar-num">01</span>
+      <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <h3 class="pillar-title">Feature Editors</h3>
+      <p class="pillar-text">We put your work in front of people who actually care about edits — a community that lives for the craft, not just the algorithm.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-num">02</span>
+      <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <h3 class="pillar-title">Build Community</h3>
+      <p class="pillar-text">Connect editors who don't know each other yet. The editing scene is full of talented people creating alone — RenderPact changes that.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-num">03</span>
+      <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      <h3 class="pillar-title">Give Small Editors a Stage</h3>
+      <p class="pillar-text">Follower count means nothing here. If your work is good, it deserves to be seen — full stop. No gatekeeping, no number games.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<div class="for-section">
+  <div class="for-inner">
+    <div class="reveal">
+      <p class="section-tag">Who It's For</p>
+      <h2 class="section-title">EVERY<br/><span style="color:var(--gold)">FAN<br/>EDITOR.</span></h2>
+      <p class="section-body">Any app. Any fandom. Any follower count. If you edit because you love it, RenderPact is built for you.</p>
+      <div class="for-tags">
+        <span class="for-tag">CapCut</span>
+        <span class="for-tag">After Effects</span>
+        <span class="for-tag">Premiere Pro</span>
+        <span class="for-tag">VN</span>
+        <span class="for-tag">Alight Motion</span>
+        <span class="for-tag">DaVinci Resolve</span>
+        <span class="for-tag">K-Pop Edits</span>
+        <span class="for-tag">Sports Edits</span>
+        <span class="for-tag">Anime Edits</span>
+        <span class="for-tag">Drama Edits</span>
+        <span class="for-tag">Any Fandom</span>
+      </div>
+    </div>
+    <div class="for-stat-grid reveal">
+      <div class="for-stat">
+        <div class="for-stat-num">5+</div>
+        <div class="for-stat-label">Years in the Community</div>
+      </div>
+      <div class="for-stat">
+        <div class="for-stat-num">∞</div>
+        <div class="for-stat-label">Follower Count Required</div>
+      </div>
+      <div class="for-stat">
+        <div class="for-stat-num">0</div>
+        <div class="for-stat-label">Reposts for Clout</div>
+      </div>
+      <div class="for-stat">
+        <div class="for-stat-num">100%</div>
+        <div class="for-stat-label">Built for Editors</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT SECTION -->
+<section id="submit">
+  <div class="reveal" style="text-align:center; max-width: 640px; margin: 0 auto;">
+    <p class="section-tag">Submit Your Edit</p>
+    <h2 class="section-title">READY TO BE<br/><span style="color:var(--gold)">FEATURED?</span></h2>
+    <p class="section-body" style="margin: 0 auto 40px; text-align:center;">
+      Send us your best edit on Instagram. DM us directly or tag us in your post. 
+      No minimum followers. No gatekeeping. Just good edits.
+    </p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="https://instagram.com/renderpact" target="_blank" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        DM @renderpact
+      </a>
+    </div>
+    <p style="margin-top:20px; font-size:13px; color:var(--muted); letter-spacing:0.05em;">
+      Tag us in your edit post — we watch every mention.
+    </p>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="cta-banner-inner reveal">
+    <h2 class="cta-banner-title">THE WORLD<br/>WILL <span class="gold">HEAR YOU.</span></h2>
+    <p class="cta-banner-sub">
+      Join the community where editors finally find each other.<br/>
+      Follow RenderPact on Instagram and be part of something real.
+    </p>
+    <div class="cta-banner-actions">
+      <a href="https://instagram.com/renderpact" target="_blank" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Follow on Instagram
+      </a>
+      <a href="#submit" class="btn-secondary">
+        Submit Your Edit
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">
+    <img src="renderpact_instagram_dp.png" alt="RenderPact"/>
+    <span class="footer-wordmark">RENDER<span>PACT</span></span>
+  </a>
+  <p class="footer-copy">© 2025 RenderPact — Built by editors, for editors.</p>
+  <a href="https://instagram.com/renderpact" target="_blank" class="footer-instagram">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    @renderpact
+  </a>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
