@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Join RenderPact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-dim: #7A6128;
+      --black: #080808;
+      --surface: #141414;
+      --border: rgba(201,168,76,0.18);
+      --text: #E8E0D0;
+      --muted: #7A756A;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20vh; left: 50%;
+      transform: translateX(-50%);
+      width: 70vw; height: 60vh;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; right: -100px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-wrap {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 64px;
+      animation: fadeUp .6s ease both;
+    }
+
+    .logo-wrap img { width: 52px; height: 52px; border-radius: 10px; }
+
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: .12em;
+      color: var(--gold-light);
+    }
+
+    .headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 5vw, 76px);
+      line-height: .95;
+      letter-spacing: .02em;
+      color: var(--text);
+      margin-bottom: 28px;
+      animation: fadeUp .6s .1s ease both;
+    }
+
+    .headline span {
+      display: block;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 360px;
+      margin-bottom: 56px;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .pillars {
+      display: flex; flex-direction: column; gap: 20px;
+      animation: fadeUp .6s .3s ease both;
+    }
+
+    .pillar { display: flex; align-items: flex-start; gap: 14px; }
+
+    .pillar-icon {
+      width: 32px; height: 32px;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    .pillar-label { font-size: 13px; font-weight: 500; color: var(--text); letter-spacing: .04em; margin-bottom: 2px; }
+    .pillar-desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px;
+    }
+
+    .form-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: .22em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      animation: fadeUp .6s .15s ease both;
+    }
+
+    .form-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      letter-spacing: .05em;
+      color: var(--text);
+      margin-bottom: 36px;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .field-group {
+      display: flex; flex-direction: column; gap: 20px;
+      animation: fadeUp .6s .3s ease both;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      font-weight: 500;
+    }
+
+    .field input,
+    .field select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .field input::placeholder { color: #3A3630; }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+      background: #181818;
+    }
+
+    .field input.error,
+    .field select.error {
+      border-color: rgba(220,80,60,0.7) !important;
+      box-shadow: 0 0 0 3px rgba(220,80,60,0.08) !important;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .agree { display: flex; align-items: flex-start; gap: 10px; }
+
+    .agree-check {
+      width: 16px; height: 16px; min-width: 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+      transition: all .2s;
+    }
+
+    .agree-check.checked { background: var(--gold); border-color: var(--gold); }
+    .agree-check.error   { border-color: rgba(220,80,60,0.7); }
+    .agree-check svg { display: none; }
+    .agree-check.checked svg { display: block; }
+
+    .agree p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    .divider { display: flex; align-items: center; gap: 12px; }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text { font-size: 11px; color: var(--muted); letter-spacing: .08em; white-space: nowrap; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px 24px;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, #A87D2A 100%);
+      border: none;
+      border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: .14em;
+      color: var(--black);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(201,168,76,0.35);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+    .btn-submit .btn-text    { display: block; }
+    .btn-submit .btn-sending { display: none; }
+    .btn-submit.sending .btn-text    { display: none; }
+    .btn-submit.sending .btn-sending { display: block; }
+
+    .success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+      animation: fadeUp .5s ease both;
+    }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--gold-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      color: var(--gold);
+    }
+
+    .success-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: .06em;
+      color: var(--text);
+    }
+
+    .success-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 320px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 860px) {
+      .page { grid-template-columns: 1fr; }
+      .left { display: none; }
+      .right { padding: 48px 28px; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div class="logo-wrap">
+      <img src="logo_png.png" alt="RenderPact" onerror="this.style.display='none'"/>
+      <span class="logo-text">RenderPact</span>
+    </div>
+    <h1 class="headline">Your edits<br>deserve<br><span>the stage.</span></h1>
+    <p class="sub">RenderPact is the community where fan editors finally find each other — and get the recognition their craft deserves.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">★</div>
+        <div>
+          <div class="pillar-label">Get Featured</div>
+          <div class="pillar-desc">Your best work, in front of people who actually care about edits.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">◈</div>
+        <div>
+          <div class="pillar-label">Real Community</div>
+          <div class="pillar-desc">Connect with editors across every fandom, app, and skill level.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">▶</div>
+        <div>
+          <div class="pillar-label">Any App, Any Fandom</div>
+          <div class="pillar-desc">CapCut, After Effects, Premiere — if you edit with love, you belong here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div id="form-wrap">
+      <div class="form-eyebrow">Join the Community</div>
+      <h2 class="form-title">Create Your Profile</h2>
+
+      <div class="field-group">
+
+        <div class="row">
+          <div class="field">
+            <label>Your Name</label>
+            <input type="text" id="name" placeholder="e.g. Zara" autocomplete="off"/>
+          </div>
+          <div class="field">
+            <label>Instagram Username</label>
+            <input type="text" id="instagram" placeholder="yourhandle" autocomplete="off"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+        </div>
+
+        <div class="field">
+          <label>Primary Editing App</label>
+          <select id="app">
+            <option value="" disabled selected>Select your tool...</option>
+            <option>CapCut</option>
+            <option>After Effects</option>
+            <option>Premiere Pro</option>
+            <option>Final Cut Pro</option>
+            <option>DaVinci Resolve</option>
+            <option>VN Editor</option>
+            <option>Alight Motion</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Your Fandom(s)</label>
+          <input type="text" id="fandoms" placeholder="e.g. anime, K-pop, Marvel, football..." autocomplete="off"/>
+        </div>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">almost there</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="agree">
+          <div class="agree-check" id="agree-check" onclick="toggleAgree()">
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M1 4l3 3 5-6" stroke="#080808" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p>I agree to RenderPact's community guidelines. My work won't be reposted without credit, and I'm here to build — not just to be built up.</p>
+        </div>
+
+        <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">
+          <span class="btn-text">JOIN RENDERPACT</span>
+          <span class="btn-sending">SENDING...</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">✦</div>
+      <div class="success-title">You're In.</div>
+      <p class="success-sub">Welcome to RenderPact. You've been editing in silence long enough — the world is about to hear you.</p>
+      <p style="font-size:12px;color:var(--gold-dim);letter-spacing:.08em;margin-top:8px;">CHECK YOUR EMAIL FOR NEXT STEPS</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxe-s_Ka6h4K-83ljhO_xrR6s47KMK5mrjBuUo2v6Hy15vWZfvr6egFSuAEWKfZ00Ijng/exec';
+
+  function toggleAgree() {
+    const el = document.getElementById('agree-check');
+    el.classList.toggle('checked');
+    el.classList.remove('error');
+  }
+
+  function markError(id) {
+    const el = document.getElementById(id);
+    el.classList.add('error');
+    el.addEventListener('input', () => el.classList.remove('error'), { once: true });
+    el.addEventListener('change', () => el.classList.remove('error'), { once: true });
+  }
+
+  function handleSubmit() {
+    const name      = document.getElementById('name').value.trim();
+    const instagram = document.getElementById('instagram').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const app       = document.getElementById('app').value;
+    const fandoms   = document.getElementById('fandoms').value.trim();
+    const agreed    = document.getElementById('agree-check').classList.contains('checked');
+
+    let valid = true;
+    if (!name)      { markError('name');      valid = false; }
+    if (!instagram) { markError('instagram'); valid = false; }
+    if (!email)     { markError('email');     valid = false; }
+    if (!app)       { markError('app');       valid = false; }
+    if (!agreed)    { document.getElementById('agree-check').classList.add('error'); valid = false; }
+    if (!valid) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.classList.add('sending');
+    btn.disabled = true;
+
+    // Open script URL in hidden iframe — most reliable way to fire GET
+    const params = new URLSearchParams({ name, instagram, email, app, fandoms });
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = SHEET_URL + '?' + params.toString();
+    document.body.appendChild(iframe);
+
+    // Show success after 2s — data is already sent
+    setTimeout(showSuccess, 2000);
+  }
+
+  function showSuccess() {
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'flex';
+  }
+</script>
+</body>
+</html>
